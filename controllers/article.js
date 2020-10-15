@@ -7,7 +7,7 @@ const Article = require('../models/article'); // get user's model
 module.exports.getArticles = (req, res, next) => {
   Article.find({})
     .then((u) => res.status(200).send(u))
-    .catch(next);
+    .catch({ message: 'Что-то пошло не так в Article' });
 };
 
 module.exports.createArticle = (req, res, next) => {
@@ -33,7 +33,7 @@ module.exports.createArticle = (req, res, next) => {
     owner,
   })
     .then((article) => res.status(200).send(article))
-    .catch(next);
+    .catch({ message: 'Что-то пошло не так в Article' });
 };
 
 module.exports.deleteArticle = (req, res, next) => {
@@ -45,5 +45,5 @@ module.exports.deleteArticle = (req, res, next) => {
         res.status(404).send({ message: 'Данной статьи не существует' });
       }
     })
-    .catch(next);
+    .catch({ message: 'Что-то пошло не так в Article' });
 };
