@@ -17,6 +17,9 @@ mongoose.connect('mongodb://localhost:27017/diplomdb', {
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use('/', user);
+app.use('/', article);
+
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает
   console.log(`App listening on port ${PORT}`);
