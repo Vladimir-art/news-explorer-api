@@ -7,6 +7,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const { article } = require('./routes/article');
 const { user } = require('./routes/user');
+const { createUser } = require('./controllers/user');
 
 mongoose.connect('mongodb://localhost:27017/diplomdb', {
   useNewUrlParser: true,
@@ -16,6 +17,8 @@ mongoose.connect('mongodb://localhost:27017/diplomdb', {
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.post('/signup', createUser);
 
 app.use('/', user);
 app.use('/', article);

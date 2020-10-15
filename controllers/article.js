@@ -11,6 +11,7 @@ module.exports.getArticles = (req, res, next) => {
 };
 
 module.exports.createArticle = (req, res, next) => {
+  console.log(req.body);
   const {
     keyword,
     title,
