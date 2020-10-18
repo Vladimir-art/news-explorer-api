@@ -1,3 +1,4 @@
+const bcryptjs = require('bcryptjs'); // password's hash
 const validator = require('validator'); // validator
 const jwt = require('jsonwebtoken'); // get token
 
@@ -10,10 +11,39 @@ module.exports.getUser = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
-  console.log(req.body);
   const { name, email, password } = req.body;
-
-  User.create({ name, email, password })
-    .then((user) => res.status(200).send(user))
-    .catch({ message: 'Что-то пошло не так в User' });
+  bcryptjs.hash(password, 10)
+    .then((hash) => {
+      User.create({ name, email, password: hash })
+        .then((user) => res.status(200).send({ name: user.name, email: user.email }))
+        .catch((err) => {
+          if (err.name === 'MongoError' && err.code === 11000) {
+            return res.status(409).send({ message: 'Такой пользователь уже существует' });
+          }
+          return res.status(400).send({ message: 'Ошибка создания пользователя' });
+        });
+    });
 };
+
+module.exports.login = (req, res) => {
+  const { email, password } = req.body;
+
+  User.findOne({ email }).select('+password')
+    .then((user) => {
+      if (!user) {
+        return Promise.reject(new Error('Такого пользователя не существует'));
+      }
+      return bcryptjs.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            return Promise.reject(new Error('Неверный пароль'));
+          }
+          return user;
+        });
+    })
+    .then((verifiedUser) => {
+      const token = jwt.sign({ _id: verifiedUser._id }, 'some-secret-key', { expiresIn: '7d' });
+      res.status(200).send({ token });
+    })
+    .catch((err) => res.status(401).send({ message: err.message }));
+}

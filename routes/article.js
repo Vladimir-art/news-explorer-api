@@ -5,6 +5,6 @@ article.get('/articles', getArticles);
 
 article.post('/articles', createArticle);
 
-article.delete('/article/:id', deleteArticle);
+article.delete('/articles/:id', deleteArticle);
 
 module.exports = { article };

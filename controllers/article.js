@@ -11,7 +11,6 @@ module.exports.getArticles = (req, res, next) => {
 };
 
 module.exports.createArticle = (req, res, next) => {
-  console.log(req.body);
   const {
     keyword,
     title,
@@ -38,6 +37,7 @@ module.exports.createArticle = (req, res, next) => {
 };
 
 module.exports.deleteArticle = (req, res, next) => {
+  console.log('ID: ', req.params);
   Article.findByIdAndRemove(req.params.id)
     .then((c) => {
       if (c !== null) {
