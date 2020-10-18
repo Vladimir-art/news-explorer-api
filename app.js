@@ -13,6 +13,7 @@ const { user } = require('./routes/user');
 const { createUser, login } = require('./controllers/user');
 const auth = require('./middlewares/auth');
 const CentralError = require('./middlewares/CentralError');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 mongoose.connect('mongodb://localhost:27017/diplomdb', {
   useNewUrlParser: true,
@@ -22,6 +23,8 @@ mongoose.connect('mongodb://localhost:27017/diplomdb', {
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(requestLogger); // rquest logger
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
@@ -44,6 +47,8 @@ app.use('/articles', article);
 app.use('/', (req, res, next) => { // если запросы не верны, выдаем ошибку
   throw new CentralError('Запрашиваемом страницы не существует', 404);
 });
+
+app.use(errorLogger); // error logger
 
 // обработка ошибок на стадии поверки celebrate
 app.use(errors());
