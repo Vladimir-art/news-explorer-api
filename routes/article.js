@@ -1,10 +1,10 @@
 const article = require('express').Router();
 const { getArticles, createArticle, deleteArticle } = require('../controllers/article');
 
-article.get('/articles', getArticles);
+article.get('/', getArticles);
 
-article.post('/articles', createArticle);
+article.post('/', createArticle);
 
-article.delete('/articles/:id', deleteArticle);
+article.delete('/:id', deleteArticle);
 
 module.exports = { article };
