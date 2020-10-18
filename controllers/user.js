@@ -1,5 +1,5 @@
+const { JWT_SECRET = 'dev-secret' } = process.env;
 const bcryptjs = require('bcryptjs'); // password's hash
-const validator = require('validator'); // validator
 const jwt = require('jsonwebtoken'); // get token
 
 const User = require('../models/user'); // get user's model
@@ -42,8 +42,8 @@ module.exports.login = (req, res) => {
         });
     })
     .then((verifiedUser) => {
-      const token = jwt.sign({ _id: verifiedUser._id }, 'some-secret-key', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: verifiedUser._id }, JWT_SECRET, { expiresIn: '7d' });
       res.status(200).send({ token });
     })
     .catch((err) => res.status(401).send({ message: err.message }));
-}
+};
