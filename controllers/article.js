@@ -1,9 +1,10 @@
 const Article = require('../models/article'); // get user's model
+const CentralError = require('../middlewares/CentralError');
 
 module.exports.getArticles = (req, res, next) => {
   Article.find({})
     .then((u) => res.status(200).send(u))
-    .catch({ message: 'Что-то пошло не так в Article' });
+    .catch(next);
 };
 
 module.exports.createArticle = (req, res, next) => {
@@ -29,18 +30,17 @@ module.exports.createArticle = (req, res, next) => {
     owner,
   })
     .then((article) => res.status(200).send(article))
-    .catch({ message: 'Что-то пошло не так в Article' });
+    .catch(next);
 };
 
 module.exports.deleteArticle = (req, res, next) => {
-  console.log('ID: ', req.params);
   Article.findByIdAndRemove(req.params.id)
     .then((c) => {
       if (c !== null) {
         res.status(200).send(c);
       } else {
-        res.status(404).send({ message: 'Данной статьи не существует' });
+        next(new CentralError('Данной статьи не существует', 404));
       }
     })
-    .catch({ message: 'Что-то пошло не так в Article' });
+    .catch(next);
 };
