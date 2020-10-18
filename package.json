@@ -9,9 +9,11 @@
     "celebrate": "^13.0.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-winston": "^4.0.5",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.9",
-    "validator": "^13.1.17"
+    "validator": "^13.1.17",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "eslint": "^7.11.0",
