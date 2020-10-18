@@ -1,11 +1,13 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const { Joi, celebrate, errors } = require('celebrate');
+const bodyParser = require('body-parser');
 // Слушаем 3000 порт
 const { PORT = 3000 } = process.env;
 
 const app = express();
-const bodyParser = require('body-parser');
+
 const { article } = require('./routes/article');
 const { user } = require('./routes/user');
 const { createUser, login } = require('./controllers/user');
@@ -21,8 +23,19 @@ mongoose.connect('mongodb://localhost:27017/diplomdb', {
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post('/signup', createUser);
-app.post('/signin', login);
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+    name: Joi.string().min(2).max(30).required(),
+  }),
+}), createUser);
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+  }).unknown(true),
+}), login);
 
 app.use(auth);
 
@@ -31,6 +44,9 @@ app.use('/articles', article);
 app.use('/', (req, res, next) => { // если запросы не верны, выдаем ошибку
   throw new CentralError('Запрашиваемом страницы не существует', 404);
 });
+
+// обработка ошибок на стадии поверки celebrate
+app.use(errors());
 
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
