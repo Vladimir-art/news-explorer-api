@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -45,7 +46,7 @@ app.use(auth);
 app.use('/users', user);
 app.use('/articles', article);
 app.use('/', (req, res, next) => { // если запросы не верны, выдаем ошибку
-  throw new CentralError('Запрашиваемом страницы не существует', 404);
+  throw new CentralError('Запрашиваемой страницы не существует', 404);
 });
 
 app.use(errorLogger); // error logger
@@ -68,5 +69,6 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает
+  // eslint-disable-next-line no-console
   console.log(`App listening on port ${PORT}`);
 });
