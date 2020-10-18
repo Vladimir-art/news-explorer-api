@@ -17,13 +17,6 @@ const articleSchema = mongoose.Schema({
   date: {
     type: String,
     require: true,
-    // validate: {
-    //   validator(str) {
-    //     console.log('Datteeee: ', str);
-    //     return validator.isDate({ format: 'DD/MM/YYYY' });
-    //   },
-    //   message: 'Неверный формат даты: ДД/ММ/ГГГГ',
-    // },
   },
   source: {
     type: String,
