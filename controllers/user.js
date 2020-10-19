@@ -6,8 +6,8 @@ const CentralError = require('../middlewares/CentralError');
 const User = require('../models/user'); // get user's model
 
 module.exports.getUser = (req, res, next) => {
-  User.find({})
-    .then((u) => res.status(200).send(u))
+  User.findById(req.user._id)
+    .then((u) => res.status(200).send({ name: u.name, email: u.email }))
     .catch(next);
 };
 

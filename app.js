@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -55,6 +54,7 @@ app.use(errorLogger); // error logger
 app.use(errors());
 
 app.use((err, req, res, next) => {
+  console.log(err.statusCode, 'hiii ', err.message);
   const { statusCode = 500, message } = err;
 
   res
