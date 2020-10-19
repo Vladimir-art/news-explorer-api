@@ -33,12 +33,12 @@ module.exports.login = (req, res, next) => {
   User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new CentralError('Такого пользователя не существует', 404);
+        throw new CentralError('Такого пользователя не существует', 401);
       }
       return bcryptjs.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            throw new CentralError('Неверная почта или пароль', 400);
+            throw new CentralError('Неверная почта или пароль', 401);
           }
           return user;
         });
