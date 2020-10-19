@@ -1,5 +1,5 @@
 const article = require('express').Router();
-const { Joi, celebrate, errors, Segments } = require('celebrate');
+const { Joi, celebrate, errors } = require('celebrate');
 const { getArticles, createArticle, deleteArticle } = require('../controllers/article');
 
 article.get('/', getArticles);
