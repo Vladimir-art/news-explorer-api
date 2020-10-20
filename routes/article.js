@@ -25,3 +25,14 @@ article.delete('/:id', celebrate({
 article.use(errors());
 
 module.exports = { article };
+
+
+// {
+//   "keyword": "8888888888888",
+//   "title": "88888888888",
+//   "text": "cdfdgd111111gcljcnsdfgjhbfv",
+//   "date": "23.01.2020",
+//   "source": "https://www.npmjs.com/packfvsfvage/celebrate",
+//   "link": "https://www.npmjs.com/package/celebrate",
+//   "image": "https://www.npmjs.com/package/celebrate"
+// }
