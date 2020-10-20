@@ -8,11 +8,11 @@ const { PORT } = process.env;
 
 const app = express();
 
-const { article } = require('./routes/article');
-const { user } = require('./routes/user');
+const { commonRouter } = require('./routes/index');
+
 const { createUser, login } = require('./controllers/user');
 const auth = require('./middlewares/auth');
-const CentralError = require('./middlewares/CentralError');
+const NotFoundError = require('./middlewares/NotFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 mongoose.connect('mongodb://localhost:27017/diplomdb', {
@@ -43,10 +43,10 @@ app.post('/signin', celebrate({
 
 app.use(auth);
 
-app.use('/users', user);
-app.use('/articles', article);
+app.use('/', commonRouter);
+
 app.use('/', (req, res, next) => { // если запросы не верны, выдаем ошибку
-  throw new CentralError('Запрашиваемой страницы не существует', 404);
+  throw new NotFoundError('Запрашиваемой страницы не существует');
 });
 
 app.use(errorLogger); // error logger
@@ -55,7 +55,6 @@ app.use(errorLogger); // error logger
 app.use(errors());
 
 app.use((err, req, res, next) => {
-  console.log(err.statusCode, 'hiii ', err.message);
   const { statusCode = 500, message } = err;
 
   res

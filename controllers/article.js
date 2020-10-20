@@ -1,5 +1,6 @@
 const Article = require('../models/article'); // get user's model
-const CentralError = require('../middlewares/CentralError');
+const NotFoundError = require('../middlewares/NotFoundError');
+const UnauthorizedError = require('../middlewares/UnauthorizedError');
 
 module.exports.getArticles = (req, res, next) => {
   Article.find({})
@@ -36,17 +37,16 @@ module.exports.createArticle = (req, res, next) => {
 module.exports.deleteArticle = (req, res, next) => {
   Article.findById(req.params.id).select('+owner')
     .then((c) => {
-      console.log(c);
       if (c !== null) {
         if (c.owner.toString() === req.user._id) {
           Article.deleteOne(c)
             .then(() => res.status(200).send({ message: 'Статья удалена' }))
-            .catch(() => res.status(400).send('jnjbjbjjfnjfv'));
+            .catch(next);
         } else {
-          res.status(400).send("You don't have this article");
+          throw new UnauthorizedError('Это не Ваша статья. Удалить нельзя');
         }
       } else {
-        res.status(404).send('Not found');
+        throw new NotFoundError('Данной статьи не существует');
       }
     })
     .catch(next);

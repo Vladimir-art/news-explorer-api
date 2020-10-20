@@ -1,7 +1,9 @@
 const { JWT_SECRET = 'dev-secret' } = process.env;
 const bcryptjs = require('bcryptjs'); // password's hash
 const jwt = require('jsonwebtoken'); // get token
-const CentralError = require('../middlewares/CentralError');
+const BadRequestError = require('../middlewares/BadRequestError');
+const UnauthorizedError = require('../middlewares/UnauthorizedError');
+const ConflictError = require('../middlewares/ConflictError');
 
 const User = require('../models/user'); // get user's model
 
@@ -19,9 +21,9 @@ module.exports.createUser = (req, res, next) => {
         .then((user) => res.status(200).send({ name: user.name, email: user.email }))
         .catch((err) => {
           if (err.name === 'MongoError' && err.code === 11000) {
-            throw next(new CentralError('Такой пользователь уже существует', 409));
+            next(new ConflictError('Такой пользователь уже существует'));
           }
-          throw next(new CentralError('Ошибка создания пользователя', 400));
+          next(new BadRequestError('Ошибка создания пользователя'));
         });
     })
     .catch(next);
@@ -33,12 +35,12 @@ module.exports.login = (req, res, next) => {
   User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new CentralError('Такого пользователя не существует', 401);
+        throw new UnauthorizedError('Такого пользователя не существует');
       }
       return bcryptjs.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            throw new CentralError('Неверная почта или пароль', 401);
+            throw new UnauthorizedError('Неверная почта или пароль');
           }
           return user;
         });

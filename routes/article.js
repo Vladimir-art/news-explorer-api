@@ -12,17 +12,17 @@ article.post('/', celebrate({
     text: Joi.string().required(),
     date: Joi.string().required(),
     source: Joi.string().required(),
-    link: Joi.string().required().custom((value, helper) => {
+    link: Joi.string().required().custom((value, helpers) => {
       if (validator.isURL(value)) {
         return value;
       }
-      return helper.massage('Поле ссылка заполнено некорректно');
+      return helpers.massage('Поле ссылка заполнено некорректно');
     }),
-    image: Joi.string().required().custom((value, helper) => {
+    image: Joi.string().required().custom((value, helpers) => {
       if (validator.isURL(value)) {
         return value;
       }
-      return helper.massage('Поле картинка заполнено некорректно');
+      return helpers.massage('Поле картинка заполнено некорректно');
     }),
   }),
 }), createArticle);
@@ -36,14 +36,3 @@ article.delete('/:id', celebrate({
 article.use(errors());
 
 module.exports = { article };
-
-
-// {
-//   "keyword": "8888888888888",
-//   "title": "88888888888",
-//   "text": "cdfdgd111111gcljcnsdfgjhbfv",
-//   "date": "23.01.2020",
-//   "source": "https://www.npmjs.com/packfvsfvage/celebrate",
-//   "link": "https://www.npmjs.com/package/celebrate",
-//   "image": "https://www.npmjs.com/package/celebrate"
-// }
