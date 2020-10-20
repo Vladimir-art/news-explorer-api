@@ -16,7 +16,11 @@ article.post('/', celebrate({
   }),
 }), createArticle);
 
-article.delete('/:id', deleteArticle);
+article.delete('/:id', celebrate({
+  params: Joi.object().keys({
+    id: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(),
+  }),
+}), deleteArticle);
 
 article.use(errors());
 
