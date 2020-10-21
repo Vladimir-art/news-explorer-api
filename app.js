@@ -1,4 +1,6 @@
 require('dotenv').config();
+
+const { NODE_ENV, MongoURL } = process.env;
 const express = require('express');
 const mongoose = require('mongoose');
 const { Joi, celebrate, errors } = require('celebrate');
@@ -17,7 +19,7 @@ const NotFoundError = require('./middlewares/NotFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const CONFIG = require('./config.json'); // конфиг для хранения url монго
 
-mongoose.connect(CONFIG.mongo_url, {
+mongoose.connect(NODE_ENV === 'production' ? CONFIG.mongo_url : MongoURL, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
