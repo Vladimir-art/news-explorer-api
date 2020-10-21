@@ -35,12 +35,12 @@ module.exports.login = (req, res, next) => {
   User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new UnauthorizedError('Такого пользователя не существует');
+        throw new UnauthorizedError('Такого пользователя не существует'); // 401 ошибка
       }
       return bcryptjs.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            throw new UnauthorizedError('Неверная почта или пароль');
+            throw new UnauthorizedError('Неверная почта или пароль'); // 401 ошибка
           }
           return user;
         });
