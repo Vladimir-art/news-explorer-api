@@ -48,7 +48,7 @@ app.use(auth);
 
 app.use('/', commonRouter);
 
-app.use('/', (req, res, next) => { // если запросы не верны, выдаем ошибку
+app.use('/', () => { // если запросы не верны, выдаем ошибку
   throw new NotFoundError('Запрашиваемой страницы не существует');
 });
 
@@ -60,14 +60,14 @@ app.use(errors());
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
 
-  res
+  next(res
     .status(statusCode)
     .send({
       // проверяем статус и выставляем сообщение в зависимости от него
       message: statusCode === 500
         ? 'На сервере произошла ошибка'
         : message,
-    });
+    }));
 });
 
 app.listen(PORT, () => {

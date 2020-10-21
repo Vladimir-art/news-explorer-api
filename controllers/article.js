@@ -34,6 +34,7 @@ module.exports.createArticle = (req, res, next) => {
     .catch(next);
 };
 
+// Пользователь не может удалить сохранённую карточку из профиля другого пользователя
 module.exports.deleteArticle = (req, res, next) => {
   Article.findById(req.params.id).select('+owner')
     .then((c) => {
