@@ -19,7 +19,7 @@ const NotFoundError = require('./middlewares/NotFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const CONFIG = require('./config.json'); // конфиг для хранения url монго
 
-mongoose.connect(NODE_ENV === 'production' ? CONFIG.mongo_url : MongoURL, {
+mongoose.connect(NODE_ENV === 'production' ? MongoURL : CONFIG.mongo_url, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
