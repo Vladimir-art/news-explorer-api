@@ -16,6 +16,7 @@ const { commonRouter } = require('./routes/index'); // подключаем об
 const { createUser, login } = require('./controllers/user');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./middlewares/NotFoundError');
+const { centralError } = require('./middlewares/centralError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const CONFIG = require('./config.json'); // конфиг для хранения url монго
 
@@ -59,18 +60,8 @@ app.use(errorLogger); // error logger
 // обработка ошибок на стадии поверки celebrate
 app.use(errors());
 
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-
-  next(res
-    .status(statusCode)
-    .send({
-      // проверяем статус и выставляем сообщение в зависимости от него
-      message: statusCode === 500
-        ? 'На сервере произошла ошибка'
-        : message,
-    }));
-});
+// центральный обработчик ошибок
+app.use(centralError);
 
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает
