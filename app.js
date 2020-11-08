@@ -2,7 +2,6 @@ require('dotenv').config();
 
 const { NODE_ENV, MongoURL } = process.env;
 const express = require('express');
-const cors = require('cors');
 const mongoose = require('mongoose');
 const { Joi, celebrate, errors } = require('celebrate');
 const bodyParser = require('body-parser');
@@ -11,8 +10,6 @@ const limiter = require('./rateLimiter');
 const { PORT = 3000 } = process.env;
 
 const app = express();
-
-app.use(cors({ origin: false }));
 
 const { commonRouter } = require('./routes/index'); // подключаем общий роутер
 
