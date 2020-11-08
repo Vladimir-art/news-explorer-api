@@ -12,7 +12,7 @@ const { PORT = 3000 } = process.env;
 
 const app = express();
 
-app.use(cors({ origin: false }));
+app.use(cors({ origin: true }));
 
 const { commonRouter } = require('./routes/index'); // подключаем общий роутер
 
