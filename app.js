@@ -12,6 +12,8 @@ const { PORT = 3000 } = process.env;
 
 const app = express();
 
+app.use(cors({ origin: false }));
+
 const { commonRouter } = require('./routes/index'); // подключаем общий роутер
 
 const { createUser, login } = require('./controllers/user');
@@ -27,7 +29,6 @@ mongoose.connect(NODE_ENV === 'production' ? MongoURL : CONFIG.mongo_url, {
   useFindAndModify: false,
 });
 
-app.use(cors({ origin: true }));
 app.use(limiter); // подключаем rate-limit
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }));
