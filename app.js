@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const { NODE_ENV, MongoURL } = process.env;
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const { Joi, celebrate, errors } = require('celebrate');
 const bodyParser = require('body-parser');
@@ -26,6 +27,7 @@ mongoose.connect(NODE_ENV === 'production' ? MongoURL : CONFIG.mongo_url, {
   useFindAndModify: false,
 });
 
+app.use(cors({ origin: true }));
 app.use(limiter); // подключаем rate-limit
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }));
