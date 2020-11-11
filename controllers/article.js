@@ -3,7 +3,7 @@ const NotFoundError = require('../middlewares/NotFoundError');
 const ForbiddenError = require('../middlewares/ForbiddenError');
 
 module.exports.getArticles = (req, res, next) => {
-  Article.find({})
+  Article.find({}).select('+owner')
     .then((u) => res.status(200).send(u))
     .catch(next);
 };
