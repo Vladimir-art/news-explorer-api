@@ -9,7 +9,7 @@ const User = require('../models/user'); // get user's model
 
 module.exports.getUser = (req, res, next) => {
   User.findById(req.user._id)
-    .then((u) => res.status(200).send({ name: u.name, email: u.email }))
+    .then((u) => res.status(200).send({ name: u.name, email: u.email, id: u._id }))
     .catch(next);
 };
 
